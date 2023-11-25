@@ -1,0 +1,18 @@
+{
+  "name": "umgc_capstone_mk",
+  "version": "1.0.0",
+  "description": "Test for UMGC Weather Capstone",
+  "main": "script.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node script.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
+
+
