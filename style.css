@@ -30,12 +30,21 @@ body {
 	background: #6C757D;
 }
 .bottom-block {
-    margin-top: 10px;
-    list-style: none;
-	color: #fff;
-	padding: 18px 16px;
-	border-radius: 5px;
+    padding: 18px 16px;
+    display: flex;
+    color: #fff;
+    border-radius: 5px;
 	background: #6C757D;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+.bottom-block .img {
+    list-style: none;
+    color: #fff;
+    padding: 18px 16px;
+    border-radius: 5px;
+    background: #6C757D;
+    width: calc(50% - 5px);
 }
 .container {
 	display: flex;
