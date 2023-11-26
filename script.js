@@ -5,22 +5,13 @@ if (typeof window !== 'undefined') {
     const locationButton = document.querySelector(".location-btn");
     const currentWeatherDiv = document.querySelector(".current-weather");
     const weatherCardsDiv = document.querySelector(".weather-cards");
+    let currentWeatherData = null;
 
-    // Use a placeholder value for API_KEY in the browser environment
-    const API_KEY = "6b75e1f27bd464fbc659aabb6312388f"
+    const API_KEY = "6b75e1f27bd464fbc659aabb6312388f"; // OpenWeatherMap API key
 
     const createWeatherCard = (cityName, weatherItem, index) => {
         if (index === 0) {
-            return `<div class="details">
-                        <h2>${cityName} (${weatherItem.dt_txt.split(" ")[0]})</h2>
-                        <h4>Temperature: ${(weatherItem.main.temp - 273.15).toFixed(2)}°C</h4>
-                        <h4>Wind: ${weatherItem.wind.speed} M/S</h4>
-                        <h4>Humidity: ${weatherItem.main.humidity}%</h4>
-                    </div>
-                    <div class="icon">
-                        <img src="https://openweathermap.org/img/wn/${weatherItem.weather[0].icon}@4x.png" alt="weather-icon">
-                        <h4>${weatherItem.weather[0].description}</h4>
-                    </div>`;
+            return " ";
         } else {
             return `<li class="card">
                         <h3>(${weatherItem.dt_txt.split(" ")[0]})</h3>
@@ -34,35 +25,40 @@ if (typeof window !== 'undefined') {
 
     const getWeatherDetails = (cityName, lat, lon) => {
         const WEATHER_API_URL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}`;
+    
+        return new Promise((resolve, reject) => {
+            fetch(WEATHER_API_URL)
+                .then(res => res.json())
+                .then(data => {
+                    currentWeatherData = data;
+                    const uniqueForecastDays = [];
 
-        fetch(WEATHER_API_URL)
-            .then(res => res.json())
-            .then(data => {
-                const uniqueForecastDays = [];
+                    const sevenDaysForecast = data.list.filter(forecast => {
+                        const forecastDate = new Date(forecast.dt_txt).getDate();
+                        if (!uniqueForecastDays.includes(forecastDate)) {
+                            return uniqueForecastDays.push(forecastDate);
+                        }
+                    });
 
-                const sevenDaysForecast = data.list.filter(forecast => {
-                    const forecastDate = new Date(forecast.dt_txt).getDate();
-                    if (!uniqueForecastDays.includes(forecastDate)) {
-                        return uniqueForecastDays.push(forecastDate);
-                    }
+                    // Clears old data
+                    cityInput.value = "";
+                    currentWeatherDiv.innerHTML = "";
+                    weatherCardsDiv.innerHTML = "";
+
+                    sevenDaysForecast.forEach((weatherItem, index) => {
+                        weatherCardsDiv.insertAdjacentHTML("beforeend", createWeatherCard(cityName, weatherItem, index));
+                    });
+
+                    resolve(); // Resolve the promise when data is fetched
+                })
+                .catch(error => {
+                    reject(error); // Reject the promise if there's an error
                 });
-
-                // Clears old data
-                cityInput.value = "";
-                currentWeatherDiv.innerHTML = "";
-                weatherCardsDiv.innerHTML = "";
-
-                sevenDaysForecast.forEach((weatherItem, index) => {
-                    weatherCardsDiv.insertAdjacentHTML("beforeend", createWeatherCard(cityName, weatherItem, index));
-                });
-            })
-            .catch(() => {
-                alert("An error occurred while fetching the weather forecast!");
-            });
+        });
     }
 
     const getCityCoordinates = () => {
-        const cityName = cityInput.value.trim();
+        const cityName = cityInput.value.trim(); // deletes trailing spaces after user input
         if (!cityName) return;
         const GEOCODING_API_URL = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=${API_KEY}`;
 
@@ -71,7 +67,17 @@ if (typeof window !== 'undefined') {
             .then(data => {
                 if (!data.length) return alert(`No coordinates found for ${cityName}`);
                 const { name, lat, lon } = data[0];
-                getWeatherDetails(name, lat, lon);
+            
+                document.getElementById('cityName').textContent = name;
+                getWeatherDetails(name, lat, lon)
+                    .then(() => {
+                        const currentDate = currentWeatherData.list[0].dt_txt.split(" ")[0];
+                        document.getElementById('currentDate').textContent = currentDate;
+                        setCurrentWeatherCard();
+                    })
+                    .catch(error => {
+                        alert(`An error occurred while fetching the weather details: ${error.message}`);
+                    });
             })
             .catch(() => {
                 alert("An error occurred while fetching the coordinates!");
@@ -81,14 +87,25 @@ if (typeof window !== 'undefined') {
     const getLocalCoordinates = () => {
         navigator.geolocation.getCurrentPosition(
             position => {
+                // Pulls user location and searches for city
                 const { latitude, longitude } = position.coords;
                 const REVERSE_GEOCODING_URL = `https://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&limit=1&appid=${API_KEY}`;
-
+            
                 fetch(REVERSE_GEOCODING_URL)
                     .then(res => res.json())
                     .then(data => {
                         const { name } = data[0];
-                        getWeatherDetails(name, latitude, longitude);
+                
+                        document.getElementById('cityName').textContent = name;
+                        getWeatherDetails(name, latitude, longitude)
+                            .then(() => {
+                                const currentDate = currentWeatherData.list[0].dt_txt.split(" ")[0];
+                                document.getElementById('currentDate').textContent = currentDate;
+                                setCurrentWeatherCard();
+                            })
+                            .catch(error => {
+                                alert(`An error occurred while fetching the weather details: ${error.message}`);
+                            });
                     })
                     .catch(() => {
                         alert("An error occurred while fetching the city!");
@@ -102,15 +119,50 @@ if (typeof window !== 'undefined') {
         );
     }
 
+    const setCurrentWeatherCard = () => {
+        const weatherItem = currentWeatherData.list[0]; // Get the current weather item
+
+    // Check if the current weather item is available
+        if (weatherItem) {
+            const bottomBlock = document.querySelector(".bottom-block");
+    
+            // Update the HTML content of the bottom block
+            bottomBlock.innerHTML = `
+                <div class="bottom-details">
+                    <h4>Temperature: ${(weatherItem.main.temp - 273.15).toFixed(2)}°C</h4>
+                    <h4>Wind: ${weatherItem.wind.speed} M/S</h4>
+                    <h4>Humidity: ${weatherItem.main.humidity}%</h4>
+                </div>
+                <div class="icon">
+                    <img src="https://openweathermap.org/img/wn/${weatherItem.weather[0].icon}@4x.png" alt="weather-icon">
+                    <h4>${weatherItem.weather[0].description}</h4>
+                </div>
+            `;
+        }
+    };
+
     locationButton.addEventListener("click", getLocalCoordinates);
     searchButton.addEventListener("click", getCityCoordinates);
     cityInput.addEventListener("keyup", e => e.key === "Enter" && getCityCoordinates());
+
 } else {
     // Code for the Node.js environment
     console.log("This code is running in a Node.js environment.");
 
     const createWeatherCard = (cityName, weatherItem, index) => {
-        if (index === 0) {
+        if (index === 0) { //Switched to current createWeatherCard if else - MH
+            return " ";
+        } else {
+            return `<li class="card">
+                        <h3>(${weatherItem.dt_txt.split(" ")[0]})</h3>
+                        <img src="https://openweathermap.org/img/wn/${weatherItem.weather[0].icon}@2x.png" alt="weather-icon">
+                        <h4>Temp: ${(weatherItem.main.temp - 273.15).toFixed(2)}°C</h4>
+                        <h4>Wind: ${weatherItem.wind.speed} M/S</h4>
+                        <h4>Humidity: ${weatherItem.main.humidity}%</h4>
+                    </li>`;
+        }
+        //Left old code in case wanted to change back
+        /*if (index === 0) {
             return `<div class="details">
                         <h2>${cityName} (${weatherItem.dt_txt.split(" ")[0]})</h2>
                         <h4>Temperature: ${(weatherItem.main.temp - 273.15).toFixed(2)}°C</h4>
@@ -129,7 +181,7 @@ if (typeof window !== 'undefined') {
                         <h4>Wind: ${weatherItem.wind.speed} M/S</h4>
                         <h4>Humidity: ${weatherItem.main.humidity}%</h4>
                     </li>`;
-        }
+        }*/
     }
 
     const getWeatherDetails = (cityName, lat, lon) => {
