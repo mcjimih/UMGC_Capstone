@@ -1,7 +1,13 @@
 <!--
-Matthew Hendrix
+Matthew Hendrix/Andrew Wesley
 HTML Doc for Weather App Capstone
-CAO: 26 Nov 23
+CAO: 27 Nov 23
+
+Required info per OpenWeather needs to be visible on site
+------------------------------
+Weather data provided by OpenWeather
+https://openweathermap.org
+get image
 -->
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -14,6 +20,13 @@ CAO: 26 Nov 23
 	</head>
 	<body>
         <div class="header">
+            <!-- toggle switch code provided by Andrew Wesley -->
+            <label class="switch">
+        	   <input type="checkbox" id="toggleTemperature">
+        	   <span class="slider round"></span>
+        	   <span class="label-c">°C</span>
+        	   <span class="label-f">°F</span>
+            </label>
             <input class="city-input" type="text" placeholder="Search for City">
             <button class="search-btn">
                 <img src="./Search_icon.png" alt="Search Icon"/>
