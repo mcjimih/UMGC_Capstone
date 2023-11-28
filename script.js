@@ -159,13 +159,12 @@ switchElement.addEventListener("change", () => {
     if (switchElement.checked) {
         currentUnit = callImperial;
         currentTempUnit = fahrenheitSign;
+        currentWindUnit = imperialWind;
     } else {
         currentUnit = callMetric;
         currentTempUnit = celsiusSign;
+        currentWindUnit = metricWind;
     }
-
-    // Perform any necessary actions when the switch is toggled, such as updating weather data
-    // ...
 });
 
 locationButton.addEventListener("click", getLocalCoordinates);
