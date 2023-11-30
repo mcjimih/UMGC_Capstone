@@ -1,14 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
-{
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-	font-family: 'Open Sans', sans-serif;
-}
 body {
     margin: 0;
     padding: 0;
 	background: #E3F2FD;
+    font-family: 'Open Sans', sans-serif;
 }
 .header {
     background: #6C757D;
@@ -30,12 +25,18 @@ body {
     margin-right: 5px;
 }
 .location-btn {
-    margin-right: 10px;
+    margin-right: 5px;
 }
 .search-btn,
 .location-btn {
     border: 1px solid transparent;
     border-radius: 8px;
+}
+.alerts-btn {
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-weight: bold;
+    margin-right: 10px;
 }
 .header img {
     width: 25px;
@@ -200,7 +201,57 @@ input:checked + .slider:before {
   right: 5px; /* Adjust the right position as needed */
 }
 
+/*Alerts Page Styling*/
+.alerts-email-input {
+    display: flex;
+    flex-direction: row; /* Ensure items are in a row */
+    align-items: center;
+    justify-content: flex-start;
+    padding: 5px; /* Adjust as needed */
+}
+.alerts-email-input h4 {
+    margin-right: 10px; /* Adjust as needed */
+}
 
+.contact-input {
+    width: 300px; /* Adjust as needed */
+}
+.alerts-area-code-input {
+    display: flex;
+    flex-direction: row; /* Ensure items are in a row */
+    align-items: center;
+    justify-content: flex-start;
+    padding: 5px; /* Adjust as needed */
+}
+.alerts-area-code-input h4 {
+    margin-right: 10px;
+}
+.area-code-input {
+    width: 115px;
+}
+.alerts-header {
+    background: #6C757D;
+	color: #fff;
+    display: flex;
+    font-size: 1.5rem;
+    justify-content: center;
+	text-align: center;
+    padding: 1px 0;
+}
+.alerts-sign-up {
+    display: flex;
+    flex-direction: row; /* Ensure items are in a row */
+    align-items: center;
+    justify-content: flex-start;
+    padding: 5px; /* Adjust as needed */
+}
+.alerts-enter-btn{
+    border: 1px solid #6C757D;
+    border-radius: 8px;
+    font-weight: bold;
+    margin-right: 10px;
+    padding: 4px;
+}
 @media (max-width: 1400px) {
 	.weather-data .current-weather {
 		padding: 20px;
