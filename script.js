@@ -1,4 +1,10 @@
+/* 
+Authors: Matthew Hendrix/Andrew Wesley/Monikai Tinson
+Purpose: Reaches out to OpenWeather for weather data and updates html items with information
+*/
+
 // Check if the script is running in a browser environment
+//Monikai Tinson set up Node.js testing
 if (typeof window !== 'undefined') {
     const cityInput = document.querySelector(".city-input");
     const searchButton = document.querySelector(".search-btn");
@@ -25,6 +31,7 @@ if (typeof window !== 'undefined') {
     const API_KEY = "6b75e1f27bd464fbc659aabb6312388f"; // OpenWeatherMap API key
 
     const createWeatherCard = (cityName, weatherItem, index) => {
+	    //Weather date format provided by Andrew Wesley
         const forecastDate = new Date(weatherItem.dt_txt).toLocaleDateString(undefined, {
 		  weekday: 'short',
             month: 'short',
@@ -33,7 +40,7 @@ if (typeof window !== 'undefined') {
     
         if (index === 0) {
             return " ";
-        } else {
+        } else { //sets forecast weather cards data
             return `<li class="card">
                         <h3>${forecastDate}</h3>
                         <img src="https://openweathermap.org/img/wn/${weatherItem.weather[0].icon}@2x.png" alt="weather-icon">
@@ -54,7 +61,7 @@ if (typeof window !== 'undefined') {
                     currentWeatherData = data;
                     const uniqueForecastDays = [];
 
-                    const sevenDaysForecast = data.list.filter(forecast => {
+                    const fiveDaysForecast = data.list.filter(forecast => {
                     const forecastDate = new Date(forecast.dt_txt).getDate();
                         if (!uniqueForecastDays.includes(forecastDate)) {
                             return uniqueForecastDays.push(forecastDate);
@@ -65,7 +72,7 @@ if (typeof window !== 'undefined') {
                     cityInput.value = "";
                     weatherCardsDiv.innerHTML = "";
 
-                    sevenDaysForecast.forEach((weatherItem, index) => {
+                    fiveDaysForecast.forEach((weatherItem, index) => {
                         weatherCardsDiv.insertAdjacentHTML("beforeend", createWeatherCard(cityName, weatherItem, index));
                     });
 
@@ -76,7 +83,7 @@ if (typeof window !== 'undefined') {
                 });
         });
     }
-
+	//Inputs user designated city name and pulls weather info
     const getCityCoordinates = () => {
         const cityName = cityInput.value.trim(); // deletes trailing spaces after user input
         if (!cityName) return;
@@ -103,7 +110,7 @@ if (typeof window !== 'undefined') {
                 alert("An error occurred while fetching the coordinates!");
             });
     }
-
+	//Pulls the lat long of the user's device and inputs into OpenWeather call and pulls the city/county weather info.
     const getLocalCoordinates = () => {
         navigator.geolocation.getCurrentPosition(
             position => {
@@ -166,7 +173,7 @@ if (typeof window !== 'undefined') {
             document.getElementById('currentDate').textContent = currentDate;
         }
     };
-
+	//Calls the API for either imperial or metric units based on position of switch
     switchElement.addEventListener("change", () => {
         if (switchElement.checked) {
             currentUnit = callImperial;
@@ -207,27 +214,6 @@ if (typeof window !== 'undefined') {
                         <h4>Humidity: ${weatherItem.main.humidity}%</h4>
                     </li>`;
         }
-        //Left old code in case wanted to change back
-        /*if (index === 0) {
-            return `<div class="details">
-                        <h2>${cityName} (${weatherItem.dt_txt.split(" ")[0]})</h2>
-                        <h4>Temperature: ${(weatherItem.main.temp - 273.15).toFixed(2)}°C</h4>
-                        <h4>Wind: ${weatherItem.wind.speed} M/S</h4>
-                        <h4>Humidity: ${weatherItem.main.humidity}%</h4>
-                    </div>
-                    <div class="icon">
-                        <img src="https://openweathermap.org/img/wn/${weatherItem.weather[0].icon}@4x.png" alt="weather-icon">
-                        <h4>${weatherItem.weather[0].description}</h4>
-                    </div>`;
-        } else {
-            return `<li class="card">
-                        <h3>(${weatherItem.dt_txt.split(" ")[0]})</h3>
-                        <img src="https://openweathermap.org/img/wn/${weatherItem.weather[0].icon}@2x.png" alt="weather-icon">
-                        <h4>Temp: ${(weatherItem.main.temp - 273.15).toFixed(2)}°C</h4>
-                        <h4>Wind: ${weatherItem.wind.speed} M/S</h4>
-                        <h4>Humidity: ${weatherItem.main.humidity}%</h4>
-                    </li>`;
-        }*/
     }
 
     const getWeatherDetails = (cityName, lat, lon) => {
@@ -240,7 +226,7 @@ if (typeof window !== 'undefined') {
             .then(data => {
                 const uniqueForecastDays = [];
 
-                const sevenDaysForecast = data.list.filter(forecast => {
+                const fiveDaysForecast = data.list.filter(forecast => {
                     const forecastDate = new Date(forecast.dt_txt).getDate();
                     if (!uniqueForecastDays.includes(forecastDate)) {
                         return uniqueForecastDays.push(forecastDate);
@@ -248,7 +234,7 @@ if (typeof window !== 'undefined') {
                 });
 
                 // Log the forecast data
-                console.log(sevenDaysForecast);
+                console.log(fiveDaysForecast);
 
                 
             })
