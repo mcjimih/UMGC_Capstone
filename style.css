@@ -1,3 +1,8 @@
+/*
+Authors: Matthew Hendrix/Andrew Wesley
+Purpose: Add styling to HTML to make it look not bland
+*/
+
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
 body {
     margin: 0;
@@ -152,7 +157,7 @@ body {
   bottom: 0;
   transition: 0.4s;
   border: 2px solid whitesmoke;
-  border-radius: 17px; /* Half of the height to make it circular */
+  border-radius: 17px;
 }
 
 .slider:before {
@@ -186,42 +191,42 @@ input:checked + .slider:before {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  color: cadetblue; /* Set text color */
-  font-size: 14px; /* Adjust font size as needed */
-  font-weight: bold; /* Optionally set font weight */
-  padding: 0 5px; /* Add padding to labels */
+  color: cadetblue;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 0 5px;
 }
 
 /* Position labels on each side */
 .label-c {
-  left: 5px; /* Adjust the left position as needed */
+  left: 5px;
 }
 
 .label-f {
-  right: 5px; /* Adjust the right position as needed */
+  right: 5px;
 }
 
 /*Alerts Page Styling*/
 .alerts-email-input {
     display: flex;
-    flex-direction: row; /* Ensure items are in a row */
+    flex-direction: row;
     align-items: center;
     justify-content: flex-start;
-    padding: 5px; /* Adjust as needed */
+    padding: 5px;
 }
 .alerts-email-input h4 {
-    margin-right: 10px; /* Adjust as needed */
+    margin-right: 10px;
 }
 
 .contact-input {
-    width: 300px; /* Adjust as needed */
+    width: 300px;
 }
 .alerts-area-code-input {
     display: flex;
-    flex-direction: row; /* Ensure items are in a row */
+    flex-direction: row;
     align-items: center;
     justify-content: flex-start;
-    padding: 5px; /* Adjust as needed */
+    padding: 5px;
 }
 .alerts-area-code-input h4 {
     margin-right: 10px;
@@ -240,10 +245,10 @@ input:checked + .slider:before {
 }
 .alerts-sign-up {
     display: flex;
-    flex-direction: row; /* Ensure items are in a row */
+    flex-direction: row;
     align-items: center;
     justify-content: flex-start;
-    padding: 5px; /* Adjust as needed */
+    padding: 5px;
 }
 .alerts-enter-btn{
     border: 1px solid #6C757D;
@@ -252,6 +257,8 @@ input:checked + .slider:before {
     margin-right: 10px;
     padding: 4px;
 }
+
+/* Changes layout of website based on size of browser */
 @media (max-width: 1400px) {
 	.weather-data .current-weather {
 		padding: 20px;
