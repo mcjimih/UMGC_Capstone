@@ -24,30 +24,3 @@ dynamoDB.putItem(params, function(err, data) {
     console.log('Item inserted successfully:', data);
   }
 });
-
-
-/* Testing for Static Website access */
-const http = require('http');
-
-const options = {
-  hostname: 'up4ch9eh3c.execute-api.us-east-2.amazonaws.com',
-  path: '/Testing_Stage/test-to-pull-data',
-  method: 'GET'
-};
-
-const button = document.querySelector('testDataGET');
-button.addEventListener('click', () => {
-  const req = http.request(options, res => {
-    console.log(`statusCode: ${res.statusCode}`);
-
-    res.on('data', d => {
-      process.stdout.write(d);
-    });
-  });
-
-  req.on('error', error => {
-    console.error(error);
-  });
-
-  req.end();
-});
