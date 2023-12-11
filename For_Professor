@@ -1,0 +1,13 @@
+IAM role for AWS
+1. Go to https://aws.amazon.com/
+2. Select "Sign In to the Console" in the top right
+3. Select "IAM user"
+4. Enter the following:
+  Account ID: 550243129333
+  username: student
+  password: C@p$70ne_UMGC
+
+The systems used are API Gateway, Lambda, and DynamoDB
+To test the functionality of inputting data you can access Lambda. Access the pushData fuction and edit the Test event to add the data you want.
+To test the functionality of reading data you can either access the ReadData function in Lambda and press Test or through API Gateway. You can access the Testing_DB_Functionality API and use either the GET or POST resource (they currently do the same thing)
+and go to the Test tab, scroll to the bottom, and click Test.
